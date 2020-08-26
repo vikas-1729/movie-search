@@ -2,47 +2,32 @@ import React from "react";
 import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
-import { addMovies } from "../actions/index";
+import { addMovies, actionChangeTab } from "../actions/index";
 class App extends React.Component {
-  constructor() {
-    super();
-    // we can also add it to store direct and dispatch action
-    this.state = {
-      tabMovies: true,
-      tabFavorites: false,
-    };
-  }
   componentDidMount() {
     const { store } = this.props;
+
     store.subscribe(() => {
-      console.log("updated");
       this.forceUpdate();
     });
     store.dispatch(addMovies(data));
-    console.log("check state", store.getState());
   }
-  moviesTab = () => {
-    this.setState({
-      tabMovies: true,
-    });
-  };
-  favouritesTab = () => {
-    this.setState({
-      tabMovies: false,
-    });
+  changeTab = (value) => {
+    const { store } = this.props;
+    store.dispatch(actionChangeTab(value));
   };
   isFavourite = (movie) => {
-    const { favourites } = this.props.store.getState();
-    let index = favourites.indexOf(movie);
+    const { movies } = this.props.store.getState();
+    let index = movies.favourites.indexOf(movie);
     if (index === -1) {
       return false;
     }
     return true;
   };
   render() {
-    const { tabMovies } = this.state;
-    const { movies, favourites } = this.props.store.getState();
-    const displayMovies = tabMovies === true ? movies : favourites;
+    const { movies } = this.props.store.getState(); // our state {movies,search}
+    const { list, favourites, tabMovies } = movies;
+    const displayMovies = tabMovies === true ? list : favourites;
     return (
       <div className="App">
         <Navbar />
@@ -50,13 +35,17 @@ class App extends React.Component {
           <div className="tabs">
             <div
               className={tabMovies === true ? "active-tabs" : "tab"}
-              onClick={this.moviesTab}
+              onClick={() => {
+                this.changeTab(true);
+              }}
             >
               MOVIES
             </div>
             <div
               className={tabMovies === false ? "active-tabs" : "tab"}
-              onClick={this.favouritesTab}
+              onClick={() => {
+                this.changeTab(false);
+              }}
             >
               Favourites
             </div>
@@ -65,7 +54,6 @@ class App extends React.Component {
             {displayMovies.map((movie, index) => {
               return (
                 <MovieCard
-                  tab="movie"
                   store={this.props.store}
                   movie={movie}
                   isFavourite={this.isFavourite(movie)}

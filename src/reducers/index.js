@@ -1,32 +1,22 @@
+import { combineReducers } from "redux";
+
 import {
   ADD_MOVIES,
   ADD_FAVOURITES,
   REMOVE_FAVOURITES,
+  CHANGE_TAB,
 } from "../actions/index";
-export default function (state = { movies: [], favourites: [] }, action) {
-  // let newState = { ...state };
-  // if (action.type === ADD_MOVIES) {
-  //   newState.movies = action.movies;
-  //   return newState;
-  // }
-  // if (action.type === ADD_FAVOURITES) {
-  //   console.log("inside reducer");
-  //   newState.favourites.push(action.favouriteMovie);
-  //   return newState;
-  // }
-  // if (action.type === REMOVE_FAVOURITES) {
-  //   let newFavourite = state.favourites.filter(function (favMovie) {
-  //     return favMovie !== action.removeFavourite;
-  //   });
-  //   newState.favourites = newFavourite;
-  //   return newState;
-  // }
-  // return newState;
+let intialMoviesState = {
+  list: [],
+  favourites: [],
+  tabMovies: true,
+};
+export function movies(state = intialMoviesState, action) {
   switch (action.type) {
     case ADD_MOVIES:
       return {
         ...state,
-        movies: action.movies,
+        list: action.movies,
       };
     case ADD_FAVOURITES:
       return {
@@ -40,10 +30,35 @@ export default function (state = { movies: [], favourites: [] }, action) {
       });
       newState.favourites = newFavourite;
       return newState;
-
+    case CHANGE_TAB:
+      return {
+        ...state,
+        tabMovies: action.value,
+      };
     default:
       return {
         ...state,
       };
   }
 }
+
+let initialSearchState = {};
+
+export function search(state = initialSearchState, action) {
+  return state;
+}
+// let initialState = {
+//   movies: intialMoviesState,
+//   search: initialSearchState,
+// };
+// export default function rootReducer(state = initialState, action) {
+//   return {
+//     movies: movies(state.movies, action),
+//     search: search(state.search, action),
+//   };
+// }
+export default combineReducers({
+  // this use to provide by redux
+  movies: movies,
+  search: search,
+});

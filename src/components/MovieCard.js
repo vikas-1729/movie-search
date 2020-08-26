@@ -2,17 +2,16 @@ import React from "react";
 
 import { addToFavourite, removeFromFavourite } from "../actions/index";
 class MovieCard extends React.Component {
-  btnClicked = (tab, movie) => {
-    const { store, isFavourite } = this.props;
-    console.log();
-    if (tab === "movie" && isFavourite === false) {
+  btnClicked = (isFavourite, movie) => {
+    const { store } = this.props;
+    if (isFavourite === false) {
       store.dispatch(addToFavourite(movie));
     } else {
       store.dispatch(removeFromFavourite(movie));
     }
   };
   render() {
-    const { tab, movie, isFavourite } = this.props;
+    const { movie, isFavourite } = this.props;
     let btnValue = "ADD TO FAVOURITES";
     if (isFavourite) {
       btnValue = "UNFAVOURITES";
@@ -30,7 +29,7 @@ class MovieCard extends React.Component {
             <button
               className={isFavourite ? "unfavourite-btn" : "favourite-btn"}
               onClick={() => {
-                this.btnClicked(tab, movie);
+                this.btnClicked(isFavourite, movie);
               }}
             >
               {btnValue}
