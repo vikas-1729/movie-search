@@ -5,6 +5,8 @@ import {
   ADD_FAVOURITES,
   REMOVE_FAVOURITES,
   CHANGE_TAB,
+  ADD_SEARCH_RESULT,
+  ADD_SEARCH_TO_LIST,
 } from "../actions/index";
 let intialMoviesState = {
   list: [],
@@ -12,6 +14,7 @@ let intialMoviesState = {
   tabMovies: true,
 };
 export function movies(state = intialMoviesState, action) {
+  console.log("action");
   switch (action.type) {
     case ADD_MOVIES:
       return {
@@ -35,6 +38,12 @@ export function movies(state = intialMoviesState, action) {
         ...state,
         tabMovies: action.value,
       };
+    case ADD_SEARCH_TO_LIST:
+      return {
+        ...state,
+        list: [action.movie, ...state.list],
+      };
+
     default:
       return {
         ...state,
@@ -42,10 +51,31 @@ export function movies(state = intialMoviesState, action) {
   }
 }
 
-let initialSearchState = {};
+let initialSearchState = {
+  result: {},
+  showResult: false,
+};
 
 export function search(state = initialSearchState, action) {
-  return state;
+  console.log("succes");
+  switch (action.type) {
+    case ADD_SEARCH_RESULT:
+      return {
+        ...state,
+        result: action.movie,
+        searchResult: true,
+      };
+    case ADD_SEARCH_TO_LIST:
+      return {
+        ...state,
+        searchResult: false,
+      };
+
+    default:
+      return {
+        ...state,
+      };
+  }
 }
 // let initialState = {
 //   movies: intialMoviesState,

@@ -8,6 +8,7 @@ class App extends React.Component {
     const { store } = this.props;
 
     store.subscribe(() => {
+      console.log("okk i am updating");
       this.forceUpdate();
     });
     store.dispatch(addMovies(data));
@@ -30,7 +31,7 @@ class App extends React.Component {
     const displayMovies = tabMovies === true ? list : favourites;
     return (
       <div className="App">
-        <Navbar />
+        <Navbar store={this.props.store} />
         <div className="main">
           <div className="tabs">
             <div
