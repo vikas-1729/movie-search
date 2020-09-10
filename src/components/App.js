@@ -3,6 +3,7 @@ import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, actionChangeTab } from "../actions/index";
+import { StoreContext } from "../index";
 class App extends React.Component {
   componentDidMount() {
     const { store } = this.props;
@@ -68,4 +69,14 @@ class App extends React.Component {
     );
   }
 }
-export default App;
+
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <StoreContext.Consumer>
+        {(store) => <App store={store} />}
+      </StoreContext.Consumer>
+    );
+  }
+}
+export default AppWrapper;
