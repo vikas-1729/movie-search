@@ -40,7 +40,7 @@ export function handleSearchAction(text) {
   //   dispatch(addSearchResult(data));
   // };
   return function (dispatch) {
-    const url = `http://www.omdbapi.com/?apikey=87a61b7&t=${text}`;
+    const url = `https://www.omdbapi.com/?apikey=87a61b7&t=${text}`;
     fetch(url).then((response) =>
       response.json().then((data) => {
         console.log("data", data);

@@ -3,23 +3,19 @@ import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, actionChangeTab } from "../actions/index";
-import { StoreContext } from "../index";
+import { connect } from "react-redux";
+
 class App extends React.Component {
   componentDidMount() {
-    const { store } = this.props;
-
-    store.subscribe(() => {
-      console.log("okk i am updating");
-      this.forceUpdate();
-    });
-    store.dispatch(addMovies(data));
+    const { dispatch } = this.props;
+    dispatch(addMovies(data));
   }
   changeTab = (value) => {
-    const { store } = this.props;
-    store.dispatch(actionChangeTab(value));
+    const { dispatch } = this.props;
+    dispatch(actionChangeTab(value));
   };
   isFavourite = (movie) => {
-    const { movies } = this.props.store.getState();
+    const { movies } = this.props;
     let index = movies.favourites.indexOf(movie);
     if (index === -1) {
       return false;
@@ -27,7 +23,7 @@ class App extends React.Component {
     return true;
   };
   render() {
-    const { movies } = this.props.store.getState(); // our state {movies,search}
+    const { movies, dispatch } = this.props; // our state {movies,search}
     const { list, favourites, tabMovies } = movies;
     const displayMovies = tabMovies === true ? list : favourites;
     return (
@@ -56,7 +52,7 @@ class App extends React.Component {
             {displayMovies.map((movie, index) => {
               return (
                 <MovieCard
-                  store={this.props.store}
+                  dispatch={dispatch}
                   movie={movie}
                   isFavourite={this.isFavourite(movie)}
                   key={`movie${index}`}
@@ -70,13 +66,11 @@ class App extends React.Component {
   }
 }
 
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <StoreContext.Consumer>
-        {(store) => <App store={store} />}
-      </StoreContext.Consumer>
-    );
-  }
+function mapToState(state) {
+  return {
+    movies: state.movies,
+  };
 }
-export default AppWrapper;
+const connectedAppComponent = connect(mapToState)(App);
+
+export default connectedAppComponent;

@@ -1,19 +1,19 @@
 import React from "react";
 import { handleSearchAction, addSearchTolist } from "../actions/index";
-import { StoreContext } from "../index";
+import { connect } from "react-redux";
 class Navbar extends React.Component {
   addMovieToList = (movie) => {
-    const { store } = this.props;
-    store.dispatch(addSearchTolist(movie));
+    const { dispatch } = this.props;
+    dispatch(addSearchTolist(movie));
   };
   handleSearch = () => {
-    const { store } = this.props;
+    const { dispatch } = this.props;
     let e = document.getElementById("search-text");
     console.log("1");
-    store.dispatch(handleSearchAction(e.value));
+    dispatch(handleSearchAction(e.value));
   };
   render() {
-    const { search } = this.props.store.getState();
+    const { search } = this.props;
     const { result: movie, searchResult } = search;
     return (
       <div className="nav">
@@ -48,14 +48,19 @@ class Navbar extends React.Component {
   }
 }
 
-class NavbarWrapper extends React.Component {
-  render() {
-    return (
-      <StoreContext.Consumer>
-        {(store) => <Navbar store={store} />}
-      </StoreContext.Consumer>
-    );
-  }
+// class NavbarWrapper extends React.Component {
+//   render() {
+//     return (
+//       <StoreContext.Consumer>
+//         {(store) => <Navbar store={store} />}
+//       </StoreContext.Consumer>
+//     );
+//   }
+// }
+function MapToState(state) {
+  return {
+    search: state.search,
+  };
 }
-
-export default NavbarWrapper;
+const connectedNavBarComponent = connect(MapToState)(Navbar);
+export default connectedNavBarComponent;

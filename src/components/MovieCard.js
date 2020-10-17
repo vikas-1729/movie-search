@@ -3,11 +3,11 @@ import React from "react";
 import { addToFavourite, removeFromFavourite } from "../actions/index";
 class MovieCard extends React.Component {
   btnClicked = (isFavourite, movie) => {
-    const { store } = this.props;
+    const { dispatch } = this.props;
     if (isFavourite === false) {
-      store.dispatch(addToFavourite(movie));
+      dispatch(addToFavourite(movie));
     } else {
-      store.dispatch(removeFromFavourite(movie));
+      dispatch(removeFromFavourite(movie));
     }
   };
   render() {
